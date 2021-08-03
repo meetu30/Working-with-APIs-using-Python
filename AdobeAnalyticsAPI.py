@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-
-@author: meetu
-"""
-
 import time
 from datetime import datetime,timedelta
 import requests, yaml
@@ -15,7 +9,6 @@ import urllib3
 urllib3.disable_warnings()
 yaml.warnings({ 'YAML Loadwarning': False})
 import json
-main_path = "C:/Users/meetu/Desktop"
 import yaml
 
 ################ Create a log file for today ##############
@@ -26,7 +19,7 @@ log = open(str(main_path) + "/Adobe/log/log_" + datetimenow + ".txt", "a+")
 
 ############### Load config file to capture all credentials ############
 try:
-    with open(str(main_path) + "/Adobe/config/config.yml", "r") as dbconf:
+    with open("config.yml", "r") as dbconf:
         dbconfig = yaml.load(dbconf, Loader = yaml.FullLoader)
         
     UID = dbconfig.get("UID")
@@ -100,7 +93,7 @@ response = resp.json()
 
 ############# optional step: saving json in local machine
 parsed_json = json.loads(resp.text)
-with open('C:/Users/mx007/Desktop/myJsonFile.json', 'w') as f:
+with open('myJsonFile.json', 'w') as f:
     json.dump(parsed_json, f, indent = 4, sort_keys=True, separators = (",", ":"))
 
 ############# create a list which will fetch all metrics values
