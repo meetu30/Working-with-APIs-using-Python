@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-
-Created on Mon Mar 22 17:21:45 2021
-
-@author: meetu
-"""
-
 import time
 from datetime import datetime,timedelta
 import requests, yaml
@@ -17,7 +9,7 @@ import urllib3
 urllib3.disable_warnings()
 yaml.warnings({ 'YAML Loadwarning': False})
 import json
-main_path = "C:/Users/meetu/Desktop"
+main_path = "<Enter file Path here>"
 
 ################ Create a log file for today ##############
 tnow = str(datetime.now() - timedelta(0)).split()
