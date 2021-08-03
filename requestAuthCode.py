@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 """
-Created on Fri Feb 19 09:17:55 2021
 This is step 1, right after you create developer's account, you create an app
 for this app, you are given client id and secret key
 Using those credentials, you make an API call, shown below, to request authorization Code
