@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 """
-Created on Tue Apr 27 14:00:08 2021
 ########## Automate Access Token generation
 @author: meetu
 """
@@ -17,18 +15,16 @@ urllib3.disable_warnings()
 yaml.warnings({ 'YAML Loadwarning': False})
 import json
 import pandas as pd
-main_path = "C:/Users/meetu/Desktop"
-
 
 ################ Create a log file for today ##############
 tnow = str(datetime.now() - timedelta(0)).split()
 datetimenow = tnow[0] + '_' + '(' + tnow[1].split('.')[0] + ')'
 datetimenow = datetimenow.replace(':', '_')
-log = open(str(main_path) + "/Adobe/log/log_" + datetimenow + ".txt", "a+")
+log = open("log_" + datetimenow + ".txt", "a+")
 
 ############### Load config file to capture all credentials ############
 try:
-    with open(str(main_path) + "/Adobe/config/config.yml", "r") as dbconf:
+    with open("config.yml", "r") as dbconf:
         dbconfig = yaml.load(dbconf, Loader = yaml.FullLoader)
         
     
@@ -88,14 +84,14 @@ new_accessToken = response_json['access_token']
 
 # response_json looks like this:
 #{'token_type': 'bearer',
-# 'access_token': 'lotsofletterssymbolsandnumbers',
+# 'access_token': 'randomLettersSymbolsAndNumbers',
 # 'expires_in': 86399998}
 
 # replace old token with this new token in config file
-with open(str(main_path) + "/Adobe/config/config.yml", "r") as file:
+with open("config.yml", "r") as file:
     fileData = file.read()
 
 fileData = fileData.replace(old_accessToken, new_accessToken)
 
-with open(str(main_path) + "/Adobe/config/config.yml", "w") as file:
+with open(str("config.yml", "w") as file:
     file.write(fileData)     
