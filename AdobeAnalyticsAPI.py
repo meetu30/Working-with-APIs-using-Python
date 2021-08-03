@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 
-Created on Mon Mar 22 17:21:45 2021
-
 @author: meetu
 """
 
