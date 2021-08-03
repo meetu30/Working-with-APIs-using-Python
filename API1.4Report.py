@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 
-Created on Mon Mar 22 17:21:45 2021
 https://jasonchiu.com/posts/using-the-adobe-analytics-v1.4-api-with-python-the-older-and-actually-useful-api/
 
 
