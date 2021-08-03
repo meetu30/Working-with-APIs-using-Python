@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 """
-Created on Fri Feb 19 09:40:36 2021
 Automate access token creation process for linkedIn
 Based on 3 credentials - 1. refresh token (validity of 365 days), 2. client_id and 3. client_secret (created during app creation),
 API is called to generate new access token (validity of 60 days)
@@ -18,17 +16,16 @@ import json
 import urllib3
 import sys
 urllib3.disable_warnings()
-main_path = "C:/Users/meetu/PyPractice"
 
 # Extract today's date
 x = datetime.today()
 dt = str(datetime.now() - timedelta(0)).split()
 print(dt)
-# ['2021-07-22', '16:26:00.057233'] Output is list
+# Output is a list
 dateToday = dt[0]
 
 # create a log file for today
-log = open(str(main_path) + "/logFiles/log_getToken_" + dateToday + ".txt", "a+" )
+log = open("log_getToken_" + dateToday + ".txt", "a+" )
 
 # Read refresh token creation date from backend config file or directly hardcode it here
 refreshTokenCreationDate = "2021-02-10 01:01:01.000000"
@@ -57,7 +54,7 @@ while n:
     n = n-1
 
 print(dateList) 
-# From refreshToken Date - 2021-02-10, every 2 months we need to get New Access Token
+# for example, if refreshToken is generated on- 2021-02-10, so every 2 months from this date, we need to request new Access Token
 # So, we will call API on below 6 dates
 #['2021-04-10', '2021-06-08', '2021-08-06', '2021-10-04', '2021-12-02', '2022-01-30']
 
