@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-
 https://jasonchiu.com/posts/using-the-adobe-analytics-v1.4-api-with-python-the-older-and-actually-useful-api/
-
-
 @author: meetu
 """
 
@@ -18,7 +14,6 @@ import urllib3
 urllib3.disable_warnings()
 yaml.warnings({ 'YAML Loadwarning': False})
 import json
-main_path = "C:/Users/meetu/Desktop"
 import yaml
 
 import pandas as pd
@@ -28,11 +23,11 @@ import numpy as np
 tnow = str(datetime.now() - timedelta(0)).split()
 datetimenow = tnow[0] + '_' + '(' + tnow[1].split('.')[0] + ')'
 datetimenow = datetimenow.replace(':', '_')
-log = open(str(main_path) + "/Adobe/log/log_" + datetimenow + ".txt", "a+")
+log = open("log_" + datetimenow + ".txt", "a+")
 
 ############### Load config file to capture all credentials ############
 try:
-    with open(str(main_path) + "/Adobe/config/config.yml", "r") as dbconf:
+    with open("config.yml", "r") as dbconf:
         dbconfig = yaml.load(dbconf, Loader = yaml.FullLoader)
         
     UID = dbconfig.get("UID")
