@@ -1,8 +1,3 @@
-"""
-https://jasonchiu.com/posts/using-the-adobe-analytics-v1.4-api-with-python-the-older-and-actually-useful-api/
-@author: meetu
-"""
-
 import time
 from datetime import datetime,timedelta
 import requests, yaml
@@ -61,7 +56,7 @@ range_from = tyesterday[0] + "T00:00:00.000"
 range_to = today[0] + "T00:00:00.000"
 
 ############## Define header with all credentials ###########
-# Our header now contains everything we need for API calls
+# Our header now contains everything we need for API calls - AT, clientId and GlobalCompanyId
 HEADER = {
     'Accept':'application/json',
     'Authorization':f'Bearer {accessToken}',
@@ -69,12 +64,12 @@ HEADER = {
     'x-proxy-global-company-id': GLOBAL_COMPANY_ID,
 }
 
-# The two URL endpoints we'll need
-# We can use the same ones for Reporting or Data Warehouse APIs
+# URLs used for Reporting API
 POST_RQ_STEP1 = 'https://api5.omniture.com/admin/1.4/rest/?method=Report.Queue'
 POST_RG_STEP2 = 'https://api5.omniture.com/admin/1.4/rest/?method=Report.Get'
 
-# Define our variables
+# Define our variables - METS list has all variables that we want to fetch
+# ELEMS has page levels or dimensions and BODY has all credentials
 METS = [{'id':'pageviews'},
         {'id':'visits'},
         {'id':'visitors'},
@@ -101,20 +96,19 @@ BODY = {
     }
 }
 
-# our first post request
+# The first URL defined above will help us connect to server and will return reportID
 session = requests.Session()
 session.verify = False
 r1 = session.post(url=POST_RQ_STEP1,headers=HEADER,json=BODY)
 
-# r1.json() looks like this and we'll feed it into our step 2 Report.Get
+# r1.json() Print it in JSON format and you can see that reportID, which will be used in step 2 to get actual data for metrices defined in METS
 # {'reportID': 1234567890}
-
 
 # give us a timestamp
 def timestamp():
     return datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
   
-# will use formula 2*(4^n) for backoff
+# use formula 2*(4^n) for backoff, which will define the sleep time between consecutive requests
 # 8 sec, 32sec, 124sec (~2min), ~8min, ~34min [will never exceed 5 steps in cloud run (60min max run time)]
 def try_with_backoff(url,header,payload):
     print(f'{timestamp()} trying request')
@@ -137,25 +131,10 @@ def try_with_backoff(url,header,payload):
 # our second post request
 r2 = try_with_backoff(url=POST_RG_STEP2, header=HEADER, payload=r1.json())
 
-# function that creates lists filled with zeros
-def gen_zero_list(n):
-    out = []
-    for i in range(0,n):
-        out.append(0)
-    return out
-
-# function to fillna with our special zero lists
-def fill_nan(x,mets):
-    try:
-        if(len(x)>0):
-            return x
-    except:
-        return gen_zero_list(len(mets))
-    
-    
-# explode the number of levels there are and stitch together the df we want
+  
+# explode the number of levels there are and create a DF
 def explode_n_concat(df,col_name,elems,mets):
-    # put some info into variables
+    # put info into variables
     metrics = [x['name'] for x in mets]
     dimensions = [x['name'] for x in elems]
     
@@ -171,7 +150,7 @@ def explode_n_concat(df,col_name,elems,mets):
         df = df.explode(col_name+f'_{i}').reset_index(drop=True)
         # put the breakdown in a new dataframe
         df_temp = pd.DataFrame.from_records(df[col_name+f'_{i}'].dropna().tolist())
-        # rename the columns to show the level
+        # rename the columns to add level related information
         df_temp.columns = df_temp.columns + f'_{i+1}'
         # change the name of the name columns to match the elements
         df_temp.rename(columns={f'name_{i+1}':dimensions[i]},inplace=True)
@@ -201,7 +180,7 @@ def req_2_df(req):
 df = req_2_df(r2)
 
    
-finalList = df.values.tolist()
+finalList = df.values.tolist()  # converting DF to flatList with each element representing data for all dimensions, which will be pushed into database
 
 ############## Set up connection to database ##############
 try:
