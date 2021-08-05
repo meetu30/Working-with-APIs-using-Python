@@ -29,7 +29,7 @@ body = {
 {'id': 'metrics/bouncerate'}
 
 ]},
-'dimension': 'variables/daterangeday', # It could be any dimension such as evar50/evar2 etc.
+'dimension': 'variables/daterangeday', # You can use any dimension such as evar50/evar2 etc.
 'settings': {
 'dimensionSort': 'asc',
 'limit': '10000'
@@ -42,7 +42,7 @@ response = resp.json()
 
 ############# optional step: saving json for level 1 data in local machine
 parsed_json = json.loads(resp.text)
-with open('C:/Users/mx007/Desktop/myJsonFile.json', 'w') as f:
+with open('myJsonFile.json', 'w') as f:
     json.dump(parsed_json, f, indent = 4, sort_keys=True, separators = (",", ":"))
 
 ############# Save all itemIds in a list ##################
@@ -185,13 +185,15 @@ try:
     
     finalMetrics = []
     
-    for i, v in itemValue:
-        
+    # For all ItemIDs captured at level 1, we will call function getMetrics to get corresponding metrices details
+    for i, v in itemValue:  
         print("Capturing level 2 details for Item ID : " + str(i))
         b = getMetrics(i, v)
         
+        #Keep appending rows to finalMetrics list
         finalMetrics.append(b)
         
+        # convert finalMetrics nested list to flat list, which will be pushed to DB
         flatList = []
         for elem in finalMetrics:
             for item in elem:
