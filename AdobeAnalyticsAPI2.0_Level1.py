@@ -30,7 +30,7 @@ body = {
 {'id': 'metrics/bouncerate'}
 
 ]},
-'dimension': 'variables/daterangeday', # It could be any dimension such as evar50/evar2 etc.
+'dimension': 'variables/daterangeday', # You can use any dimension such as evar50/evar2 etc.
 'settings': {
 'dimensionSort': 'asc',
 'limit': '10000'
