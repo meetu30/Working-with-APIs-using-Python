@@ -15,7 +15,7 @@ import yaml
 tnow = str(datetime.now() - timedelta(0)).split()
 datetimenow = tnow[0] + '_' + '(' + tnow[1].split('.')[0] + ')'
 datetimenow = datetimenow.replace(':', '_')
-log = open(str(main_path) + "/Adobe/log/log_" + datetimenow + ".txt", "a+")
+log = open("log_" + datetimenow + ".txt", "a+")
 
 ############### Load config file to capture all credentials ############
 try:
